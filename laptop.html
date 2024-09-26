@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Marc's PCs - Your one-stop shop for desktops, laptops, and peripherals."
+    />
+    <title>Marc's PCs</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="favicon.ico" />
+  </head>
+  <body>
+    <header>
+      <a href="index.html"><h1 class="center">Marc's PCs</h1></a>
+    </header>
+
+    <nav>
+      <ul>
+        <li><a href="desktop.html">Desktops</a></li>
+        <li><a href="laptop.html">Laptops</a></li>
+        <li><a href="cart.html">Cart</a></li>
+      </ul>
+      <div class="auth-buttons">
+        <button id="loginBtn" class="btn">Login / Sign Up</button>
+        <button id="logoutBtn" class="btn" style="display: none">
+          Log Out
+        </button>
+      </div>
+    </nav>
+    <main>
+      <h2>Laptops</h2>
+      <table class="center-table">
+        <caption>
+          Comparison of Laptop Models
+        </caption>
+        <thead>
+          <tr>
+            <th>Specs</th>
+            <th>Budget Laptop</th>
+            <th>Work Laptop</th>
+            <th>Gaming Laptop</th>
+            <th>Mobile Workstation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td></td>
+            <td>
+              <img
+                style="height: 256px; width: 256px"
+                src="img/w800.png"
+                class="pc-image"
+              />
+            </td>
+            <td>
+              <img
+                style="height: 256px; width: 256px"
+                src="img/Elitebook.avif"
+                class="pc-image"
+              />
+            </td>
+            <td>
+              <img
+                style="height: 256px; width: 256px"
+                src="img/w250.png"
+                class="pc-image"
+              />
+            </td>
+            <td>
+              <img
+                style="height: 256px; width: 256px"
+                src="img/thinkpad.avif"
+                class="pc-image"
+              />
+            </td>
+          </tr>
+          <tr>
+            <th>CPU</th>
+            <td>AMD Ryzen 5 7530U @ 2.0 GHz</td>
+            <td>Intel Core Ultra 7 155H @ 2.5 GHz</td>
+            <td>AMD Ryzen 9 8945HS @ 4.0 GHz</td>
+            <td>Intel Core Ultra 9 185H @ 5.1 GHz</td>
+          </tr>
+          <tr>
+            <th>Memory</th>
+            <td>8 GB DDR4 (Upgradable to 16 GB)</td>
+            <td>16 GB DDR5 (Upgradable to 32 GB)</td>
+            <td>32 GB DDR5</td>
+            <td>64 GB DDR5 (Upgradable to 96 GB)</td>
+          </tr>
+          <tr>
+            <th>Storage</th>
+            <td>512 GB NVMe SSD</td>
+            <td>1 TB NVMe SSD</td>
+            <td>1 TB NVMe SSD</td>
+            <td>4 TB NVMe SSDs</td>
+          </tr>
+          <tr>
+            <th>Power</th>
+            <td>42 Wh Battery + 45W Power Supply</td>
+            <td>56 Wh Battery + 65W Power Supply</td>
+            <td>73 Wh Battery + 180W Power Supply</td>
+            <td>90 Wh Battery + 170W Power Supply</td>
+          </tr>
+          <tr>
+            <th>Screen</th>
+            <td>16" 1920x1200 @ 60 Hz LED Screen</td>
+            <td>14" 1920x1200 @ 60 Hz IPS Screen</td>
+            <td>14" 2880x1800 @ 120 Hz OLED Screen</td>
+            <td>16" 2560x1600 @ 165 Hz IPS Screen</td>
+          </tr>
+          <tr>
+            <th>Graphics</th>
+            <td>AMD Radeon Vega 6 (integrated)</td>
+            <td>Intel Arc Xe-LPG 128EU (integrated)</td>
+            <td>Nvidia RTX 4060</td>
+            <td>Nvidia RTX Ada 3000</td>
+          </tr>
+          <tr>
+            <th>Webcam</th>
+            <td>720p</td>
+            <td>5MP IR Camera</td>
+            <td>1080p FHD IR Camera</td>
+            <td>5MP RGB+IR</td>
+          </tr>
+          <tr>
+            <th>Price</th>
+            <td>Rs. 43,990/-</td>
+            <td>Rs. 129,990/-</td>
+            <td>Rs. 174,990/-</td>
+            <td>Rs. 469,990/-</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th></th>
+            <td>
+              <button
+                class="buy-button"
+                data-product-id="5"
+                data-product-name="Budget Laptop"
+                data-product-price="43990"
+              >
+                Buy
+              </button>
+            </td>
+            <td>
+              <button
+                class="buy-button"
+                data-product-id="6"
+                data-product-name="Work Laptop"
+                data-product-price="129990"
+              >
+                Buy
+              </button>
+            </td>
+            <td>
+              <button
+                class="buy-button"
+                data-product-id="7"
+                data-product-name="Gaming Laptop"
+                data-product-price="174990"
+              >
+                Buy
+              </button>
+            </td>
+            <td>
+              <button
+                class="buy-button"
+                data-product-id="8"
+                data-product-name="Mobile Workstation"
+                data-product-price="469990"
+              >
+                Buy
+              </button>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </main>
+  </body>
+  <script>
+    // Function to add an item to the cart
+    function addToCart(product) {
+      fetch("http://localhost:3000/cart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          product_id: product.id,
+          quantity: 1, // Add one item at a time
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          alert(`${product.name} has been added to your cart.`);
+          // Optionally update cart count or UI
+        })
+        .catch((error) => console.error("Error:", error));
+    }
+
+    // Function to handle Buy button click
+    document.querySelectorAll(".buy-button").forEach((button) => {
+      button.addEventListener("click", function () {
+        let product = {
+          id: this.getAttribute("data-product-id"),
+          name: this.getAttribute("data-product-name"),
+          price: parseInt(this.getAttribute("data-product-price")),
+        };
+        addToCart(product);
+      });
+    });
+  </script>
+  <script src="scripts.js"></script>
+</html>
