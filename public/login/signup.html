@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Marc's PCs - Sign Up" />
+    <title>Sign Up - Marc's PCs</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <a href="../index.html"><h1 class="center">Marc's PCs</h1></a>
+    </header>
+    <main class="login-container">
+      <h2>Create Your Account</h2>
+      <form id="signupForm">
+        <div id="step1">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required />
+
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required />
+
+          <label for="confirmPassword">Confirm Password:</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            required
+          />
+
+          <button type="submit">Sign Up</button>
+        </div>
+
+        <!-- Step 2: OTP Verification -->
+        <div id="step2" style="display: none">
+          <label for="otp">Enter OTP:</label>
+          <input type="text" id="otp" name="otp" />
+          <button type="button" id="verifyOtpButton">Verify OTP</button>
+        </div>
+      </form>
+      <p>Already have an account? <a href="login.html">Login here</a></p>
+
+      <div id="errorMessage" class="error-message"></div>
+      <div id="successMessage" class="success-message"></div>
+    </main>
+
+    <script src="signup.js"></script>
+  </body>
+</html>

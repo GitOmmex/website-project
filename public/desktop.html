@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Marc's PCs - Your one-stop shop for desktops, laptops, and peripherals."
+    />
+    <title>Marc's PCs</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="favicon.ico" />
+  </head>
+  <body>
+    <header>
+      <a href="index.html"><h1 class="center">Marc's PCs</h1></a>
+    </header>
+
+    <nav>
+      <ul>
+        <li><a href="desktop.html">Desktops</a></li>
+        <li><a href="laptop.html">Laptops</a></li>
+        <li><a href="cart.html">Cart</a></li>
+      </ul>
+      <div class="auth-buttons">
+        <button id="loginBtn" class="btn">Login / Sign Up</button>
+        <button id="logoutBtn" class="btn" style="display: none">
+          Log Out
+        </button>
+      </div>
+    </nav>
+    <main>
+      <h2>Desktops</h2>
+      <table class="center-table">
+        <caption>
+          Comparison of Desktop Models
+        </caption>
+        <thead>
+          <tr>
+            <th>Specs</th>
+            <th>Budget Home PC</th>
+            <th>Office Work PC</th>
+            <th>Gaming PC</th>
+            <th>Workstation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td></td>
+            <td>
+              <img
+                src="img/Budget PC.jpg"
+                alt="Budget Home PC"
+                class="pc-image"
+              />
+            </td>
+            <td>
+              <img
+                src="img/Work PC.jpg"
+                alt="Office Work PC"
+                class="pc-image"
+              />
+            </td>
+            <td>
+              <img src="img/Gaming.jpg" alt="Gaming PC" class="pc-image" />
+            </td>
+            <td>
+              <img
+                src="img/Workstation.jpg"
+                alt="Workstation"
+                class="pc-image"
+              />
+            </td>
+          </tr>
+          <tr>
+            <th>CPU</th>
+            <td>AMD Ryzen 3 3200G @ 3.6 GHz</td>
+            <td>AMD Ryzen 5 5500 @ 3.6 GHz</td>
+            <td>AMD Ryzen 7 7800X3D @ 4.2 GHz</td>
+            <td>AMD Threadripper 3990X @ 2.9 GHz</td>
+          </tr>
+          <tr>
+            <th>Memory</th>
+            <td>16 GB DDR4 (Upgradable to 64 GB)</td>
+            <td>16 GB DDR4 (Upgradable to 64 GB)</td>
+            <td>32 GB DDR5 (Upgradable to 128 GB)</td>
+            <td>64 GB DDR4 (Upgradable to 256 GB)</td>
+          </tr>
+          <tr>
+            <th>Storage</th>
+            <td>500 GB NVMe SSD</td>
+            <td>500 GB NVMe SSD + 2 TB 7200 RPM HDD</td>
+            <td>1 TB NVMe SSD</td>
+            <td>2x 2 TB NVMe SSDs</td>
+          </tr>
+          <tr>
+            <th>Power Supply</th>
+            <td>500 W</td>
+            <td>500 W</td>
+            <td>850 W</td>
+            <td>1000 W</td>
+          </tr>
+          <tr>
+            <th>Monitor</th>
+            <td>Samsung T350 1920x1080 @ 75 Hz</td>
+            <td>Samsung T350 1920x1080 @ 75 Hz</td>
+            <td>ASUS TUF VG27AQ 2560x1440 @ 165 Hz</td>
+            <td>ASUS ROG Swift 4K @ 240 Hz</td>
+          </tr>
+          <tr>
+            <th>Graphics</th>
+            <td>AMD Radeon Vega 8 (integrated)</td>
+            <td>AMD Radeon RX 6600</td>
+            <td>Nvidia RTX 4070</td>
+            <td>Nvidia RTX 4090</td>
+          </tr>
+          <tr>
+            <th>Webcam</th>
+            <td>Logitech C270 (720p)</td>
+            <td>Logitech C270 (720p)</td>
+            <td>N/A</td>
+            <td>N/A</td>
+          </tr>
+          <tr>
+            <th>Price</th>
+            <td>Rs. 49,999/-</td>
+            <td>Rs. 70,999/-</td>
+            <td>Rs. 179,999/-</td>
+            <td>Rs. 829,999/-</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th></th>
+            <td>
+              <button
+                class="buy-button"
+                data-product-id="1"
+                data-product-name="Budget Home PC"
+                data-product-price="49999"
+              >
+                Buy
+              </button>
+            </td>
+            <td>
+              <button
+                class="buy-button"
+                data-product-id="2"
+                data-product-name="Office Work PC"
+                data-product-price="70999"
+              >
+                Buy
+              </button>
+            </td>
+            <td>
+              <button
+                class="buy-button"
+                data-product-id="3"
+                data-product-name="Gaming PC"
+                data-product-price="179999"
+              >
+                Buy
+              </button>
+            </td>
+            <td>
+              <button
+                class="buy-button"
+                data-product-id="4"
+                data-product-name="Workstation"
+                data-product-price="829999"
+              >
+                Buy
+              </button>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </main>
+  </body>
+  <script>
+    // Function to add an item to the cart
+    function addToCart(product) {
+      fetch("http://localhost:3000/cart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          product_id: product.id,
+          quantity: 1, // Add one item at a time
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          alert(`${product.name} has been added to your cart.`);
+          // Optionally update cart count or UI
+        })
+        .catch((error) => console.error("Error:", error));
+    }
+
+    // Function to handle Buy button click
+    document.querySelectorAll(".buy-button").forEach((button) => {
+      button.addEventListener("click", function () {
+        let product = {
+          id: this.getAttribute("data-product-id"),
+          name: this.getAttribute("data-product-name"),
+          price: parseInt(this.getAttribute("data-product-price")),
+        };
+        addToCart(product);
+      });
+    });
+  </script>
+  <script src="scripts.js"></script>
+</html>
