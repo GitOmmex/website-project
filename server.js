@@ -13,9 +13,9 @@ app.use(bodyParser.json());
 // MySQL Database Connection
 const db = mysql.createConnection({
   host: "sql12.freesqldatabase.com",
-  user: "sql12733736", 
-  password: "6l8FHWzVkR", 
-  database: "sql12733736", 
+  user: process.env.SQL_USER, 
+  password: process.env.SQL_PASS, 
+  database: process.env.SQL_USER, 
 });
 
 db.connect((err) => {
@@ -26,8 +26,8 @@ db.connect((err) => {
 const transporter = nodemailer.createTransport({
   service: "gmail", 
   auth: {
-    user: "marcmascarenhas11@gmail.com",
-    pass: "crea ubxq wfcr ccma",
+    user: process.env.EMAIL,
+    pass: process.env.EMAIL_PASS,
   },
 });
 
