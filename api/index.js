@@ -11,12 +11,11 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Middleware to serve static files from the "public" directory
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, '../public'))); // Adjusted path
 
 // Serve index.html for the root URL
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public', 'index.html')); // Adjusted path
 });
 
 // MySQL Database Connection
