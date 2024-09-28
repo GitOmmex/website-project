@@ -98,28 +98,26 @@ app.get("/api/cart", async (req, res) => {
 // API to Remove Item from Cart
 app.delete("/cart/:id", async (req, res) => {
   const cartId = req.params.id;
-  const deleteQuery = "DELETE FROM cart WHERE id = ?";
 
   try {
     const connection = await pool.getConnection(); // Get a connection from the pool
     console.log("Connected to MySQL database");
 
-    const [result] = await connection.query(deleteQuery, [cartId]); // Use async/await for the query
+    const deleteQuery = "DELETE FROM cart WHERE id = ?";
+    const [result] = await connection.query(deleteQuery, [cartId]);
 
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "Item not found in cart" });
+    if (result.affectedRows > 0) {
+      res.json({ message: "Item removed from cart" });
+    } else {
+      res.status(404).json({ message: "Item not found in cart" });
     }
 
-    res.json({ message: "Item removed from cart" });
     connection.release(); // Release the connection back to the pool
   } catch (err) {
-    console.error("Error:", err);
-    res
-      .status(500)
-      .json({ message: "Internal Server Error", error: err.message });
+    console.error("Error deleting item from cart:", err);
+    res.status(500).json({ message: "Database error" });
   }
 });
-
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
