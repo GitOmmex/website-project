@@ -72,14 +72,27 @@ app.post("/api/cart", async (req, res) => {
 });
 
 // API to Get Cart Items
-app.get("api/cart", (req, res) => {
-  const query = `SELECT cart.id, products.name, products.price, cart.quantity 
-                   FROM cart 
-                   JOIN products ON cart.product_id = products.id`;
-  db.query(query, (err, results) => {
-    if (err) throw err;
-    res.json(results);
-  });
+app.get("/api/cart", async (req, res) => {
+  const query = `
+    SELECT cart.id, products.name, products.price, cart.quantity 
+    FROM cart 
+    JOIN products ON cart.product_id = products.id
+  `;
+
+  try {
+    const connection = await pool.getConnection(); // Get a connection from the pool
+    console.log("Connected to MySQL database");
+
+    const [results] = await connection.query(query); // Use async/await for the query
+    res.json(results); // Send the results as JSON
+
+    connection.release(); // Release the connection back to the pool
+  } catch (err) {
+    console.error("Error:", err);
+    res
+      .status(500)
+      .json({ message: "Internal Server Error", error: err.message });
+  }
 });
 
 // API to Remove Item from Cart

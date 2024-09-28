@@ -47,7 +47,7 @@
     <script>
       // Function to add an item to the cart
       function addToCart(product) {
-        fetch("http://localhost:3000/cart", {
+        fetch("https://website-project-smoky-gamma.vercel.app/api/cart", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -79,7 +79,7 @@
 
       // Function to render the cart
       function renderCart() {
-        fetch("http://localhost:3000/cart")
+        fetch("https://website-project-smoky-gamma.vercel.app/api/cart")
           .then((response) => response.json())
           .then((cartItems) => {
             let cartTable = document.getElementById("cart-items");
@@ -111,7 +111,7 @@
 
       // Function to remove an item from the cart
       function removeFromCart(cartId) {
-        fetch(`http://localhost:3000/cart/${cartId}`, {
+        fetch(`https://website-project-smoky-gamma.vercel.app/api/cart/${cartId}`, {
           method: "DELETE",
         })
           .then((response) => response.json())
