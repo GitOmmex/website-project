@@ -19,7 +19,7 @@ document.getElementById("signupForm").addEventListener("submit", async (e) => {
 
   // Send email and password to the server to initiate OTP
   try {
-    const response = await fetch("https://website-project-smoky-gamma.vercel.app/signup-initiate", {
+    const response = await fetch("https://website-project-smoky-gamma.vercel.app/api/signup-initiate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
@@ -55,7 +55,7 @@ document.getElementById('verifyOtpButton').addEventListener('click', async () =>
 
   try {
     // Send OTP and email to server for verification
-    const response = await fetch('https://website-project-smoky-gamma.vercel.app/signup-verify', {
+    const response = await fetch('https://website-project-smoky-gamma.vercel.app/api/signup-verify', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ otp, email })
