@@ -120,7 +120,6 @@ app.delete("/cart/:id", async (req, res) => {
   }
 });
 
-const bcrypt = require("bcrypt"); // Make sure to import bcrypt at the top of your file
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
@@ -165,8 +164,6 @@ const generateOtp = () => {
 let otpStore = {};
 
 //Initiate sign-up by sending OTP
-const bcrypt = require("bcrypt"); // Make sure to import bcrypt at the top of your file
-const nodemailer = require("nodemailer"); // Ensure nodemailer is imported as well
 
 app.post("/signup-initiate", async (req, res) => {
   const { email, password } = req.body;
