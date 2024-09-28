@@ -5,17 +5,26 @@ const cors = require("cors");
 const bcrypt = require("bcryptjs"); // Use bcrypt for hashing passwords
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
+const path = require("path");
 
 const app = express();
 app.use(cors());
-app.use(bodyParser.json()); 
+app.use(bodyParser.json());
+
+// Middleware to serve static files from the "public" directory
+app.use(express.static(path.join(__dirname, "public")));
+
+// Serve index.html for the root URL
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
 
 // MySQL Database Connection
 const db = mysql.createConnection({
   host: "sql12.freesqldatabase.com",
-  user: process.env.SQL_USER, 
-  password: process.env.SQL_PASS, 
-  database: process.env.SQL_USER, 
+  user: process.env.SQL_USER,
+  password: process.env.SQL_PASS,
+  database: process.env.SQL_USER,
 });
 
 db.connect((err) => {
@@ -24,7 +33,7 @@ db.connect((err) => {
 });
 
 const transporter = nodemailer.createTransport({
-  service: "gmail", 
+  service: "gmail",
   auth: {
     user: process.env.EMAIL,
     pass: process.env.EMAIL_PASS,
@@ -117,7 +126,7 @@ const generateOtp = () => {
   return crypto.randomInt(100000, 999999).toString();
 };
 
-let otpStore = {}; 
+let otpStore = {};
 
 //Initiate sign-up by sending OTP
 app.post("/signup-initiate", (req, res) => {
