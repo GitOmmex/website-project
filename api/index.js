@@ -1,5 +1,5 @@
 const express = require("express");
-const mysql = require("mysql2");
+const mysql = require('mysql2/promise');
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const bcrypt = require("bcryptjs"); // Use bcrypt for hashing passwords
@@ -40,7 +40,7 @@ const transporter = nodemailer.createTransport({
 });
 
 // API to Add Item to Cart
-app.post("/cart", (req, res) => {
+app.post("api/cart", (req, res) => {
   const { product_id, quantity } = req.body;
 
   // Check if the product is already in the cart
@@ -69,7 +69,7 @@ app.post("/cart", (req, res) => {
 });
 
 // API to Get Cart Items
-app.get("/cart", (req, res) => {
+app.get("api/cart", (req, res) => {
   const query = `SELECT cart.id, products.name, products.price, cart.quantity 
                    FROM cart 
                    JOIN products ON cart.product_id = products.id`;
