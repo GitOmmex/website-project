@@ -2,7 +2,7 @@ const express = require("express");
 const mysql = require("mysql2");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const bcrypt = require("bcrypt"); // Use bcrypt for hashing passwords
+const bcrypt = require("bcryptjs"); // Use bcrypt for hashing passwords
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 
