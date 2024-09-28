@@ -96,42 +96,63 @@ app.get("/api/cart", async (req, res) => {
 });
 
 // API to Remove Item from Cart
-app.delete("/cart/:id", (req, res) => {
+app.delete("/cart/:id", async (req, res) => {
   const cartId = req.params.id;
   const deleteQuery = "DELETE FROM cart WHERE id = ?";
-  db.query(deleteQuery, [cartId], (err, result) => {
-    if (err) throw err;
+
+  try {
+    const connection = await pool.getConnection(); // Get a connection from the pool
+    console.log("Connected to MySQL database");
+
+    const [result] = await connection.query(deleteQuery, [cartId]); // Use async/await for the query
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Item not found in cart" });
+    }
+
     res.json({ message: "Item removed from cart" });
-  });
+    connection.release(); // Release the connection back to the pool
+  } catch (err) {
+    console.error("Error:", err);
+    res
+      .status(500)
+      .json({ message: "Internal Server Error", error: err.message });
+  }
 });
 
-app.post("/login", (req, res) => {
+const bcrypt = require("bcrypt"); // Make sure to import bcrypt at the top of your file
+
+app.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   const query = "SELECT * FROM users WHERE email = ?";
 
-  db.query(query, [email], (err, results) => {
-    if (err) {
-      return res
-        .status(500)
-        .json({ success: false, message: "Database error" });
-    }
+  try {
+    const connection = await pool.getConnection(); // Get a connection from the pool
+    console.log("Connected to MySQL database");
+
+    const [results] = await connection.query(query, [email]); // Use async/await for the query
 
     if (results.length > 0) {
       const user = results[0];
 
-      // Check if the password is correct
-      bcrypt.compare(password, user.password, (err, result) => {
-        if (result) {
-          res.json({ success: true });
-        } else {
-          res.json({ success: false, message: "Incorrect password" });
-        }
-      });
+      // Check if the password is correct using a promise
+      const match = await bcrypt.compare(password, user.password);
+
+      if (match) {
+        res.json({ success: true });
+      } else {
+        res.json({ success: false, message: "Incorrect password" });
+      }
     } else {
       res.json({ success: false, message: "Email not found" });
     }
-  });
+
+    connection.release(); // Release the connection back to the pool
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).json({ success: false, message: "Database error" });
+  }
 });
 
 const saltRounds = 10; // Defines the strength of the hash
@@ -144,18 +165,20 @@ const generateOtp = () => {
 let otpStore = {};
 
 //Initiate sign-up by sending OTP
-app.post("/signup-initiate", (req, res) => {
+const bcrypt = require("bcrypt"); // Make sure to import bcrypt at the top of your file
+const nodemailer = require("nodemailer"); // Ensure nodemailer is imported as well
+
+app.post("/signup-initiate", async (req, res) => {
   const { email, password } = req.body;
 
   // Check if the email is already registered
   const checkEmailQuery = "SELECT * FROM users WHERE email = ?";
 
-  db.query(checkEmailQuery, [email], async (err, results) => {
-    if (err) {
-      return res
-        .status(500)
-        .json({ success: false, message: "Database error" });
-    }
+  try {
+    const connection = await pool.getConnection(); // Get a connection from the pool
+    console.log("Connected to MySQL database");
+
+    const [results] = await connection.query(checkEmailQuery, [email]); // Use async/await for the query
 
     if (results.length > 0) {
       return res.json({ success: false, message: "Email already registered" });
@@ -175,17 +198,18 @@ app.post("/signup-initiate", (req, res) => {
       text: `Your OTP is ${otp}`,
     };
 
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.log(error);
-        return res
-          .status(500)
-          .json({ success: false, message: "Error sending OTP" });
-      }
+    // Send the OTP email
+    await transporter.sendMail(mailOptions); // Use async/await for sending the email
 
-      res.json({ success: true, message: "OTP sent to your email" });
+    res.json({ success: true, message: "OTP sent to your email" });
+    connection.release(); // Release the connection back to the pool
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).json({
+      success: false,
+      message: "Database error or email sending error",
     });
-  });
+  }
 });
 
 //Verify OTP and complete sign-up
@@ -203,21 +227,25 @@ app.post("/signup-verify", async (req, res) => {
     const query = "INSERT INTO users (email, password) VALUES (?, ?)";
     const values = [email, hashedPassword];
 
-    db.query(query, values, (err, result) => {
-      if (err) {
-        console.error("Error registering user:", err);
-        return res.status(500).json({
-          success: false,
-          message: "Database error. Please try again.",
-        });
-      }
+    try {
+      const connection = await pool.getConnection(); // Get a connection from the pool
+      console.log("Connected to MySQL database");
+
+      const [result] = await connection.query(query, values); // Use async/await for the query
 
       // Remove OTP from store after successful registration
       delete otpStore[email];
 
       // Send success response
       res.json({ success: true });
-    });
+      connection.release(); // Release the connection back to the pool
+    } catch (err) {
+      console.error("Error registering user:", err);
+      res.status(500).json({
+        success: false,
+        message: "Database error. Please try again.",
+      });
+    }
   } else {
     // OTP is invalid
     res.json({ success: false, message: "Invalid OTP." });
