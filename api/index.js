@@ -1,5 +1,5 @@
 const express = require("express");
-const mysql = require('mysql2');
+const mysql = require("mysql2/promise");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const bcrypt = require("bcryptjs"); // Use bcrypt for hashing passwords
@@ -11,19 +11,21 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-app.use(express.static(path.join(__dirname, '../public'))); // Adjusted path
+app.use(express.static(path.join(__dirname, "../public"))); // Adjusted path
 
 // Serve index.html for the root URL
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public', 'index.html')); // Adjusted path
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public", "index.html")); // Adjusted path
 });
 
-// MySQL Database Connection
-const db = mysql.createConnection({
+const pool = mysql.createPool({
   host: "sql12.freesqldatabase.com",
   user: process.env.SQL_USER,
   password: process.env.SQL_PASS,
-  database: process.env.SQL_USER,
+  database: process.env.SQL_USER, // Make sure this is your actual database name
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
 });
 
 db.connect((err) => {
@@ -40,32 +42,38 @@ const transporter = nodemailer.createTransport({
 });
 
 // API to Add Item to Cart
-app.post("api/cart", (req, res) => {
+app.post("/api/cart", async (req, res) => {
   const { product_id, quantity } = req.body;
 
-  // Check if the product is already in the cart
-  const query = "SELECT * FROM cart WHERE product_id = ?";
-  db.query(query, [product_id], (err, result) => {
-    if (err) throw err;
+  try {
+    const connection = await pool.getConnection(); // Get a connection from the pool
+    console.log("Connected to MySQL database");
+
+    // Check if the product is already in the cart
+    const query = "SELECT * FROM cart WHERE product_id = ?";
+    const [result] = await connection.query(query, [product_id]); // Use async/await
 
     if (result.length > 0) {
       // If the product exists, update the quantity
       const updateQuery =
         "UPDATE cart SET quantity = quantity + ? WHERE product_id = ?";
-      db.query(updateQuery, [quantity, product_id], (err, updateResult) => {
-        if (err) throw err;
-        res.json({ message: "Cart updated successfully" });
-      });
+      await connection.query(updateQuery, [quantity, product_id]); // Use async/await
+      res.json({ message: "Cart updated successfully" });
     } else {
       // If the product does not exist, insert it
       const insertQuery =
         "INSERT INTO cart (product_id, quantity) VALUES (?, ?)";
-      db.query(insertQuery, [product_id, quantity], (err, insertResult) => {
-        if (err) throw err;
-        res.json({ message: "Item added to cart" });
-      });
+      await connection.query(insertQuery, [product_id, quantity]); // Use async/await
+      res.json({ message: "Item added to cart" });
     }
-  });
+
+    connection.release(); // Release the connection back to the pool
+  } catch (err) {
+    console.error("Error:", err);
+    res
+      .status(500)
+      .json({ message: "Internal Server Error", error: err.message });
+  }
 });
 
 // API to Get Cart Items
