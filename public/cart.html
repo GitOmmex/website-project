@@ -117,7 +117,7 @@
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ cartId: $cartId }), // Send cartId in the request body
+          body: JSON.stringify({ cartId: cartId }), // Send cartId in the request body
         })
           .then((response) => response.json())
           .then((data) => console.log(data))
