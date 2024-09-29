@@ -11,18 +11,18 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-app.use(express.static(path.join(__dirname, "../public"))); // Adjusted path
+app.use(express.static(path.join(__dirname, "../public"))); 
 
 // Serve index.html for the root URL
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public", "index.html")); // Adjusted path
+  res.sendFile(path.join(__dirname, "../public", "index.html")); 
 });
 
 const pool = mysql.createPool({
   host: "sql12.freesqldatabase.com",
   user: process.env.SQL_USER,
   password: process.env.SQL_PASS,
-  database: process.env.SQL_USER, // Make sure this is your actual database name
+  database: process.env.SQL_USER, 
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
@@ -133,7 +133,7 @@ app.post("/api/login", async (req, res) => {
     if (results.length > 0) {
       const user = results[0];
 
-      // Check if the password is correct using a promise
+      // Check if the password is correct
       const match = await bcrypt.compare(password, user.password);
 
       if (match) {
@@ -187,7 +187,7 @@ app.post("/api/signup-initiate", async (req, res) => {
     otpStore[email] = { otp, hashedPassword }; // Store OTP and hashed password temporarily
 
     const mailOptions = {
-      from: "marpc.main@gmail.com",
+      from: process.env.EMAIL,
       to: email,
       subject: "Your OTP for Marc's PCs Signup",
       text: `Your OTP is ${otp}`,
