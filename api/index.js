@@ -119,7 +119,7 @@ app.delete("/api/delete", async (req, res) => {
   }
 });
 
-app.post("/login", async (req, res) => {
+app.post("/api/login", async (req, res) => {
   const { email, password } = req.body;
 
   const query = "SELECT * FROM users WHERE email = ?";
@@ -163,7 +163,7 @@ let otpStore = {};
 
 //Initiate sign-up by sending OTP
 
-app.post("/signup-initiate", async (req, res) => {
+app.post("/api/signup-initiate", async (req, res) => {
   const { email, password } = req.body;
 
   // Check if the email is already registered
@@ -208,7 +208,7 @@ app.post("/signup-initiate", async (req, res) => {
 });
 
 //Verify OTP and complete sign-up
-app.post("/signup-verify", async (req, res) => {
+app.post("/api/signup-verify", async (req, res) => {
   const { email, otp } = req.body;
 
   // Check if OTP exists for the given email in our store
