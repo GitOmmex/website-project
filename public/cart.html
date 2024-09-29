@@ -111,7 +111,7 @@
 
       // Function to remove an item from the cart
       function removeFromCart(cartId) {
-        fetch(`https://website-project-smoky-gamma.vercel.app/api/cart${cartId}`, {
+        fetch(`https://website-project-smoky-gamma.vercel.app/api/cart/${cartId}`, {
           method: "DELETE",
         })
           .then((response) => response.json())
