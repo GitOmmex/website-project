@@ -104,20 +104,23 @@
               cartTable.innerHTML += row;
             });
 
-            document.getElementById("total-amount").innerText = totalAmount.toLocaleString();
+            document.getElementById("total-amount").innerText =
+              totalAmount.toLocaleString();
           })
           .catch((error) => console.error("Error:", error));
       }
 
       // Function to remove an item from the cart
       function removeFromCart(cartId) {
-        fetch(`https://website-project-smoky-gamma.vercel.app/api/cart${cartId}`, {
+        fetch("https://website-project-smoky-gamma.vercel.app/api/cart", {
           method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ cartId: $cartId }), // Send cartId in the request body
         })
           .then((response) => response.json())
-          .then((data) => {
-            renderCart(); // Re-render the cart
-          })
+          .then((data) => console.log(data))
           .catch((error) => console.error("Error:", error));
       }
 

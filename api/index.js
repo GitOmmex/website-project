@@ -96,8 +96,8 @@ app.get("/api/cart", async (req, res) => {
 });
 
 // API to Remove Item from Cart
-app.delete("api/cart:id", async (req, res) => {
-  const cartId = req.params.id;
+app.delete("api/cart/:id", async (req, res) => {
+  const { cartId } = req.body;
 
   try {
     const connection = await pool.getConnection(); // Get a connection from the pool
