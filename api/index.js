@@ -96,7 +96,7 @@ app.get("/api/cart", async (req, res) => {
 });
 
 // API to Remove Item from Cart
-app.delete("api/cart", async (req, res) => {
+app.delete("api/delete", async (req, res) => {
   const { cartId } = req.body;
 
   try {
